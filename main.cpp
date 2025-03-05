@@ -8,7 +8,7 @@ using namespace std;
 const string python = "py";
 #else
 // TODO: If your Mac/Linux machine runs Python in CLI with "python3" instead of "python", update this line.
-const string python = "python";
+const string python = "python3";
 #endif
 
 /*
@@ -33,7 +33,7 @@ string get_filename()
     ifstream file("../" + filename);
     if (!file)
     {
-        cout << "File not found!\n";
+        cout << "File not found! Using default image.\n";
         return "autumn.jpg";
     }
 
@@ -78,16 +78,30 @@ int main() {
     cout << "Using file " << filename << "." << endl;
     print_menu();
     char choice = get_manip_choice();
-    cout << "Processing. Go to Python program when it opens. May take a few seconds." << endl;
+
+    if (choice == 'd')
+    {
+        cout << "Exiting program. Bye bye!" << endl;
+        return 0;
+    }
+
+    cout << "Processing. Go to Python program when it opens. May ake a few seconds." << endl;
     string command;
-    switch (choice) {
-        // Use command-line arguments to pass the filename and manip to the Python file
-        case 'a': command = python + " ../render.py " + filename + " flip";
-            break;
-        case 'b': command = python + " ../render.py " + filename + " mirror";
-            break;
-        case 'c': command = python + " ../render.py " + filename + " invert";
-            break;
+
+    switch (choice)
+    {
+    case 'a':
+        command = python + " render.py " + filename + " flip";
+        break;
+    case 'b':
+        command = python + " render.py " + filename + " mirror";
+        break;
+    case 'c':
+        command = python + " render.py " + filename + " invert";
+        break;
+    default:
+        cout << "Unexpected error!" << endl;
+        return 1;
     }
     system(command.c_str());
     return 0;
