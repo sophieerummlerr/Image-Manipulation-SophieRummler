@@ -19,22 +19,58 @@ const string python = "python";
  * Otherwise, return the default pic filename.
  * Hint: Use ../ before the filename when trying to open it.
  */
-string get_filename();
+string get_filename()
+{
+    string filename;
+    cout << "Enter an image filename (or press Enter to use the default 'autumn.jpg'): ";
+    getline(cin, filename);
+
+    if (filename.empty())
+    {
+        return "autumn.jpg";
+    }
+
+    ifstream file("../" + filename);
+    if (!file)
+    {
+        cout << "File not found!\n";
+        return "autumn.jpg";
+    }
+
+    return filename;
+}
 
 /*
  * Prints the main menu of options:
  * (a) flip, (b) mirror, (c) invert, or (d) exit
  */
-void print_menu();
+void print_menu()
+{
+    cout << "Choose an imagine manipulation option:\n";
+    cout << "(a) Flip\n";
+    cout << "(b) Mirror\n";
+    cout << "(c) Invert\n";
+    cout << "(d) Exit\n";
+}
 
-/*
- * Prompts the user for one of the options from the menu.
- * Validates input: makes sure the user enters exactly one character
- * and that it is one of the four valid options.
- * If it isn't valid, keep prompting for input until a valid option
- * is entered.
- */
-char get_manip_choice();
+char get_manip_choice()
+{
+    char choice;
+    while (true)
+    {
+        cout << "Enter your choice (a/b/c/d): ";
+        cin >> choice;
+        cin.ignore();
+
+        if (choice == 'a' || choice == 'b' || choice == 'c' || choice == 'd')
+        {
+            return choice;
+        } else
+        {
+            cout << "Invalid input! Please enter a, b, c, or d.\n";
+        }
+    }
+}
 
 int main() {
     cout << "Welcome to the image manipulator!" << endl;
