@@ -14,7 +14,7 @@ filename = sys.argv[1]
 manip = sys.argv[2]
 
 # Open the image file
-img = cv2.imread('../' + filename)
+img = cv2.imread(filename)
 
 # check it was loaded correctly
 if img is None:
@@ -33,7 +33,7 @@ for x in range(dimensions[0]):
         if manip == 'flip':
             img_manip[x, y] = img[dimensions[0]-1-x, y]
         elif manip == 'mirror':
-            img_manip[x, y] = img[dimensions[0]-1-y]
+            img_manip[x, y] = img[x, dimensions[1]-1-y]
         elif manip == 'invert':
             img_manip[x, y] = [white[i] - img[x, y][i] for i in range (3)]
 
@@ -48,14 +48,16 @@ cv2.imshow('Manipulated image', img_manip)
 
 
 # TODO: Create a kaleidoscope image, display it, and save it to a file.
-horizontal_concat = np.concatenate((img, img_manip), axis=1)
+img_flip = cv2.flip(img, 0)
+img_mirror = cv2.flip(img, 1)
 
-#save kaleidoscope image
-cv2.imwrite('kaleidoscope_image.jpg', horizontal_concat)
+top_row = np.concatenate((img, img_mirror), axis=1)
+bottom_row = np.concatenate((img_flip, cv2.flip(img_mirror, 0)), axis=1)
+kaleidoscope = np.concatenate((top_row, bottom_row), axis=0)
 
-#display kaleidoscope image
-cv2.imshow('Kaleidoscope Effect', horizontal_concat)
-
+#save and kaleidoscope image
+cv2.imwrite('kaleidoscope_image.jpg', kaleidoscope)
+cv2.imshow('kaleidoscope Effect', kaleidoscope)
 
 # Infinite loop to keep the windows open until the escape key is pressed.
 while True:
